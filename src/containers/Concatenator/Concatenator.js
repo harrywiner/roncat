@@ -27,6 +27,7 @@ class Concatenator extends Component {
   };
 
   render() {
+    // TODO MAKE THE INPUTS SCALE WITH TEXT
     return (
       <div className="io">
         <Input id="0" changed={(event) => this.updateWords(event, 0)} />
