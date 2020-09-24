@@ -19,20 +19,20 @@ class Concatenator extends Component {
     console.log(JSON.stringify(this.state));
   };
 
-  render() {
-    function determineResult() {
-      const words = this.state.words;
-      if (words[0] && words[1]) {
-        return concat(words[0], words[1]);
-      }
+  determineResult = () => {
+    const words = this.state.words;
+    if (words[0] && words[1]) {
+      return concat(words[0], words[1]);
     }
+  };
 
+  render() {
     return (
       <div className="io">
         <Input id="0" changed={(event) => this.updateWords(event, 0)} />
         <Input id="1" changed={(event) => this.updateWords(event, 1)} />
         <text className="spacer">.</text>
-        <Result text={determineResult()} />
+        <Result text={this.determineResult()} />
       </div>
     );
   }
