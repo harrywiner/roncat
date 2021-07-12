@@ -6,14 +6,7 @@ class App extends Component {
   render() {
     return (
       <div className="parent">
-        <div className="TODO">
-          <div className="buttons">
-            <button>Random</button>
-            <button>Reset</button>
-            <button>Copy</button>
-          </div>
-          <Concatenator />
-        </div>
+        <Concatenator />
       </div>
     );
   }

@@ -18,6 +18,11 @@ Input:focus {
   outline-color: white;
 }
 
-text.spacer {
+p.spacer {
   font-size: 30px;
+}
+
+Result {
+  margin: 0;
+  font-size: 40px
 }

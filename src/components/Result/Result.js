@@ -5,7 +5,7 @@ const result = (props) => {
     fontSize: "30px",
     paddingLeft: "30px",
   };
-  return <text style={style}>{props.text}</text>;
+  return <p style={style}>{props.text}</p>;
 };
 
 export default result;

@@ -1,4 +1,6 @@
+
 div.parent {
+  font-family: 'Muli', sans-serif;
   display: grid;
   place-items: center;
   padding-top: 0%;
@@ -7,7 +9,7 @@ div.parent {
   height: 100vh;
 }
 
-div.TODO {
+div.container {
   border: solid blue 2px;
 }
 
