@@ -73,6 +73,12 @@ class Concatenator extends Component {
     }
   }
 
+  reverse = () => {
+    var newState = this.state
+    newState.words = newState.words.reverse()
+    this.setState(newState)
+  }
+
   render() {
     // TODO MAKE THE INPUTS SCALE WITH TEXT
     return (
@@ -82,12 +88,19 @@ class Concatenator extends Component {
           <button onClick={this.random}>Random</button>
           <button onClick={this.reset}>Reset</button>
           <button onClick={this.copy}>Copy</button>
+          <button onClick={this.reverse}>Reverse</button>
         </div>
         <div className="io">
           <Input value={this.state.words[0]} id="0" changed={(event) => this.updateWords(event, 0)} />
           <Input value={this.state.words[1]} id="1" changed={(event) => this.updateWords(event, 1)} />
           <p className="spacer">.</p>
           <Result text={this.determineResult()} />
+        </div>
+        <div>
+          {this.state.message &&
+            <p id="messages" value={this.state.message}></p>
+          }
+
         </div>
       </div>
 
