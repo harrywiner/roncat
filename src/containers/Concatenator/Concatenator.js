@@ -8,6 +8,7 @@ import axios from "axios";
 
 class Concatenator extends Component {
   state = {
+    // [String]
     words: [],
     result: "",
     hello: 0
@@ -58,9 +59,10 @@ class Concatenator extends Component {
     axios.get(`/api/wotd`)
       .then((response) => {
         const newState = this.state;
-        console.log(response.data)
-        newState.words = [response.data.wordA, response.data.wordB]
+        var words = [response.data.wordA.word, response.data.wordB.word]
+        newState.words = words
         this.setState(newState)
+        this.props.setFooters([response.data.wordA, response.data.wordB])
       })
       .catch(err => {
         console.error(err)
