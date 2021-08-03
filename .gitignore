@@ -30,3 +30,6 @@ yarn-error.log*
 
 # Scraper data
 /scraper/data
+/scraper/oed_data
+/scraper/ud_data
+/scraper/screenshot.png
