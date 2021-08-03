@@ -27,3 +27,6 @@ yarn-error.log*
 
 .env
 .vscode
+
+# Scraper data
+/scraper/data
