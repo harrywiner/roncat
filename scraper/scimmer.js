@@ -3,10 +3,11 @@ require('dotenv').config()
 const { DateTime } = require("luxon");
 
 
-const url = process.env.UD_URL;
+const UD_URL = process.env.UD_URL;
 
 async function ReadUrbanDictionary() {
-    return puppeteer.launch({ userDataDir: './ud_data'/*, devtools: true*/ })
+    if (!UD_URL) throw new Error("Missing environment variable")
+    return puppeteer.launch({ userDataDir: './scraper/ud_data'/*, devtools: true*/ })
         .then(async browser => {
             const page = await browser.newPage()
             await page.setRequestInterception(true)
@@ -18,7 +19,7 @@ async function ReadUrbanDictionary() {
                     request.abort()
                 }
             })
-            await page.goto(url)
+            await page.goto(UD_URL)
 
             // find words of the day 
             let wotds = await page.evaluate(() => {
@@ -58,9 +59,10 @@ async function ReadUrbanDictionary() {
 
 }
 
-const oed = process.env.OED_URL
+const OED_URL = process.env.OED_URL
 async function ReadOED() {
-    return puppeteer.launch({ userDataDir: './oed_data' /*, devtools: true, headless: false, slowMo: 250*/ })
+    if (!OED_URL) throw new Error("Missing environment variable")
+    return puppeteer.launch({ userDataDir: './scraper/oed_data' /*, devtools: true, headless: false, slowMo: 250*/ })
         .then(async browser => {
             const page = await browser.newPage()
             await page.setRequestInterception(true)
@@ -71,8 +73,8 @@ async function ReadOED() {
                     request.abort()
                 }
             })
-            await page.goto(oed).catch(err => console.log(err))
-            await page.screenshot({ path: 'screenshot.png' })
+            await page.goto(OED_URL).catch(err => console.log(err))
+            await page.screenshot({ path: './scraper/screenshot.png' })
             let wotd = await page.evaluate(() => {
                 let word = document.querySelectorAll('span.hw')[0];
                 let result = {
@@ -95,6 +97,37 @@ async function ReadOED() {
 
 }
 
+async function TestOED() {
+    if (!OED_URL) throw new Error("Missing environment variable")
+    return puppeteer.launch({ userDataDir: './scraper/oed_data', devtools: true, headless: false, slowMo: 250 })
+        .then(async browser => {
+            const page = await browser.newPage()
+            await page.setRequestInterception(true)
+            page.on('request', (request) => {
+                if (request.resourceType() === 'document') {
+                    request.continue()
+                } else {
+                    request.abort()
+                }
+            })
+            await page.goto(OED_URL).catch(err => console.log(err))
+            await page.screenshot({ path: './scraper/screenshot.png' })
+            let wotd = await page.evaluate(() => {
+                let container = document.querySelectorAll('.wordOfTheDay')[0];
+                debugger
+                return container;
+            }).catch(err => {
+                console.log(err)
+                // browser.close()
+            })
+
+
+            browser.close()
+            return wotd
+        })
+        .catch(err => console.error(err))
+}
+
 function UDDateToUTC(date) {
     // Jul 25 Word of the Day -> 42069696969
     var exp = new RegExp(/\S{3}\s\d+/)
@@ -107,5 +140,9 @@ function UDDateToUTC(date) {
 // 
 // ReadUrbanDictionary().then(wotd => {
 //     console.log(wotd)
+// })
+
+// TestOED().then(result => {
+//     console.log(result)
 // })
 module.exports = { ReadOED, ReadUrbanDictionary }
