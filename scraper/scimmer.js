@@ -77,15 +77,19 @@ async function ReadOED() {
             await page.screenshot({ path: './scraper/screenshot.png' })
             let wotd = await page.evaluate(() => {
                 let word = document.querySelectorAll('span.hw')[0];
+                let link = document.querySelectorAll('p.word')[0].firstChild.href;
                 let result = {
                     word: word.innerText,
-                    type: "OED"
+                    type: "OED",
+                    link
                 };
                 return result;
             }).catch(err => {
                 console.log(err)
                 // browser.close()
             })
+
+
 
             wotd.date = new Date().getTime()
 
@@ -95,37 +99,6 @@ async function ReadOED() {
         })
         .catch(err => console.error(err))
 
-}
-
-async function TestOED() {
-    if (!OED_URL) throw new Error("Missing environment variable")
-    return puppeteer.launch({ userDataDir: './scraper/oed_data', devtools: true, headless: false, slowMo: 250 })
-        .then(async browser => {
-            const page = await browser.newPage()
-            await page.setRequestInterception(true)
-            page.on('request', (request) => {
-                if (request.resourceType() === 'document') {
-                    request.continue()
-                } else {
-                    request.abort()
-                }
-            })
-            await page.goto(OED_URL).catch(err => console.log(err))
-            await page.screenshot({ path: './scraper/screenshot.png' })
-            let wotd = await page.evaluate(() => {
-                let container = document.querySelectorAll('.wordOfTheDay')[0];
-                debugger
-                return container;
-            }).catch(err => {
-                console.log(err)
-                // browser.close()
-            })
-
-
-            browser.close()
-            return wotd
-        })
-        .catch(err => console.error(err))
 }
 
 function UDDateToUTC(date) {
@@ -142,7 +115,4 @@ function UDDateToUTC(date) {
 //     console.log(wotd)
 // })
 
-// TestOED().then(result => {
-//     console.log(result)
-// })
 module.exports = { ReadOED, ReadUrbanDictionary }

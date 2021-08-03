@@ -11,10 +11,10 @@ async function upsertWotds(json) {
         await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
             .catch(err => { console.error("Connection error: ", err) })
         var promises = []
-        for (word of json) {
-            var existingWord = await Wotd.findOne(word)
+        for (wotd of json) {
+            var existingWord = await Wotd.findOne({ word: wotd.word })
             if (!existingWord) {
-                var newWord = new Wotd(word)
+                var newWord = new Wotd(wotd)
                 promises.push(newWord.save())
             }
         }
