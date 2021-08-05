@@ -5,6 +5,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, 'build')));
 
+app.use(express.json())
+
 const axios = require('axios')
 axios.defaults.baseURL = `http://localhost:${PORT}`
 
