@@ -8,6 +8,14 @@ const Footer = (props) => {
         return <div className="Footer"></div>
     }
 
+    var noLinks = props.words.every((word) => {
+        return !word.link
+    })
+
+    if (noLinks) {
+        return <div className="Footer"></div>
+    }
+
     // if all words have the same link (from the same phrase)
     var firstLink = props.words[0].link
     var sameLink = props.words.every((word) => {
