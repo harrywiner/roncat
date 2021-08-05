@@ -42,6 +42,7 @@ class Concatenator extends Component {
     } else
       newState.words = ["Hello", "Boozer"]
     this.setState(newState)
+    this.props.setFooters([])
   }
 
   random = () => {
@@ -53,6 +54,7 @@ class Concatenator extends Component {
         newState.words = res.data
         this.setState(newState)
       })
+    this.props.setFooters([])
   }
 
   wotd = () => {
@@ -74,6 +76,8 @@ class Concatenator extends Component {
     newState.words = []
     this.setState(newState)
     console.log(JSON.stringify(this.state));
+
+    this.props.setFooters([])
   }
 
   copy = () => {

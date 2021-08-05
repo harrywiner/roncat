@@ -5,7 +5,7 @@ const Footer = (props) => {
     var body = []
 
     if (!props.words || !props.words[0]) {
-        return <div></div>
+        return <div className="Footer"></div>
     }
 
     // if all words have the same link (from the same phrase)
@@ -22,10 +22,10 @@ const Footer = (props) => {
             return total += " " + word.word
         }, "")
         console.log("allWords: ", allWords)
-        body.push(<a href={firstLink} rel='noreferrer' target="_blank" >Definition of {allWords}<br></br></a>)
+        body.push(<a href={firstLink} rel='noopener noreferrer' target="_blank" >Definition of {allWords}<br></br></a>)
     } else {
         for (var word of props.words) {
-            body.push(<a href={word.link} rel='noreferrer' target="_blank" >Definition of {word.word}<br></br></a>)
+            body.push(<a href={word.link} rel='noopener noreferrer' target="_blank" >Definition of {word.word}<br></br></a>)
         }
     }
 
