@@ -3,16 +3,24 @@ require('dotenv').config()
 
 const MostRecentWordsPipeline = [
     {
-        $group: {
-            _id: "$type",
-            date: {
-                $max: "$date"
-            },
-            word: { "$first": "$word" },
-            link: { "$first": "$link" }
+        '$sort': {
+            'date': -1
         }
-    },
-
+    }, {
+        '$group': {
+            '_id': '$type',
+            'date': {
+                '$max': '$date'
+            },
+            'doc': {
+                '$first': '$$ROOT'
+            }
+        }
+    }, {
+        '$replaceRoot': {
+            'newRoot': '$doc'
+        }
+    }
 ]
 
 module.exports = {

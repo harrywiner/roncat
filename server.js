@@ -30,7 +30,7 @@ app.listen(PORT, () => {
  * Error handler
  */
 app.use((err, req, res, next) => {
-    console.error("Error caught by Express: ", err.message)
+    console.error("Error caught by Express: ", err)
     if (res.headersSent)
         return next(err)
     res.status(500).send(err.message)

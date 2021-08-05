@@ -3,9 +3,33 @@ import "./Footer.css"
 
 const Footer = (props) => {
     var body = []
-    for (var word of props.words) {
-        body.push(<a href={word.link} rel='noreferrer' target="_blank" >Definition of {word.word}<br></br></a>)
+
+    if (!props.words || !props.words[0]) {
+        return <div></div>
     }
+
+    // if all words have the same link (from the same phrase)
+    var firstLink = props.words[0].link
+    var sameLink = props.words.every((word) => {
+        return word.link === firstLink
+    })
+
+    console.log("Same Link", sameLink)
+
+    if (sameLink) {
+        // return only one link (this worked first try please clap)
+        var allWords = props.words.reduce((total, word) => {
+            return total += " " + word.word
+        }, "")
+        console.log("allWords: ", allWords)
+        body.push(<a href={firstLink} rel='noreferrer' target="_blank" >Definition of {allWords}<br></br></a>)
+    } else {
+        for (var word of props.words) {
+            body.push(<a href={word.link} rel='noreferrer' target="_blank" >Definition of {word.word}<br></br></a>)
+        }
+    }
+
+
     return <div className="Footer">
         {body}
     </div>;
