@@ -22,7 +22,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "react": "react-scripts start"
+    "react": "react-scripts start",
+    "scraper": "NODE_ENV=production node ./scraper/index.js",
+    "test scraper": "NODE_ENV=development node ./scraper/index.js"
   },
   "eslintConfig": {
     "extends": "react-app"

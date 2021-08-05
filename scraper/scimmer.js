@@ -7,7 +7,24 @@ const UD_URL = process.env.UD_URL;
 
 async function ReadUrbanDictionary() {
     if (!UD_URL) throw new Error("Missing environment variable")
-    return puppeteer.launch({ userDataDir: './scraper/ud_data'/*, devtools: true*/ })
+    var options = {
+        userDataDir: './scraper/ud_data'
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+        options = {
+            args: ['--no-sandbox'],
+            ...options
+        }
+    } else if (process.env.NODE_ENV === 'development') {
+        options = {
+            devtools: true,
+            headless: false,
+            slowMo: 250,
+            ...options
+        }
+    }
+    return puppeteer.launch(options)
         .then(async browser => {
             const page = await browser.newPage()
             await page.setRequestInterception(true)
@@ -62,7 +79,24 @@ async function ReadUrbanDictionary() {
 const OED_URL = process.env.OED_URL
 async function ReadOED() {
     if (!OED_URL) throw new Error("Missing environment variable")
-    return puppeteer.launch({ userDataDir: './scraper/oed_data' /*, devtools: true, headless: false, slowMo: 250*/ })
+    var options = {
+        userDataDir: './scraper/oed_data'
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+        options = {
+            args: ['--no-sandbox'],
+            ...options
+        }
+    } else if (process.env.NODE_ENV === 'development') {
+        options = {
+            devtools: true,
+            headless: false,
+            slowMo: 250,
+            ...options
+        }
+    }
+    return puppeteer.launch(options)
         .then(async browser => {
             const page = await browser.newPage()
             await page.setRequestInterception(true)
