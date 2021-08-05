@@ -1,0 +1,32 @@
+[
+    {
+        "wordA": "test",
+        "wordB": "word",
+        "expected": "tord"
+    },
+    {
+        "wordA": "outdoor",
+        "wordB": "piano",
+        "expected": "ouiano"
+    },
+    {
+        "wordA": "simple",
+        "wordB": "oasis",
+        "expected": "soasis"
+    },
+    {
+        "wordA": "trust",
+        "wordB": "plant",
+        "expected": "trant"
+    },
+    {
+        "wordA": "idiotic",
+        "wordB": "apple",
+        "expected": "iapple"
+    },
+    {
+        "wordA": "Hello",
+        "wordB": "Boozer",
+        "expected": "Hoozer"
+    }
+]

@@ -8,6 +8,7 @@ import axios from "axios";
 
 class Concatenator extends Component {
   state = {
+    // [String]
     words: [],
     result: "",
     hello: 0
@@ -41,6 +42,7 @@ class Concatenator extends Component {
     } else
       newState.words = ["Hello", "Boozer"]
     this.setState(newState)
+    this.props.setFooters([])
   }
 
   random = () => {
@@ -52,6 +54,21 @@ class Concatenator extends Component {
         newState.words = res.data
         this.setState(newState)
       })
+    this.props.setFooters([])
+  }
+
+  wotd = () => {
+    axios.get(`/api/wotd`)
+      .then((response) => {
+        const newState = this.state;
+        var words = [response.data.wordA.word, response.data.wordB.word]
+        newState.words = words
+        this.setState(newState)
+        this.props.setFooters([response.data.wordA, response.data.wordB])
+      })
+      .catch(err => {
+        console.error(err)
+      })
   }
 
   reset = () => {
@@ -59,6 +76,8 @@ class Concatenator extends Component {
     newState.words = []
     this.setState(newState)
     console.log(JSON.stringify(this.state));
+
+    this.props.setFooters([])
   }
 
   copy = () => {
@@ -80,7 +99,6 @@ class Concatenator extends Component {
   }
 
   render() {
-    // TODO MAKE THE INPUTS SCALE WITH TEXT
     return (
       <div className="container">
         <div className="buttons">
@@ -89,6 +107,7 @@ class Concatenator extends Component {
           <button onClick={this.reset}>Reset</button>
           <button onClick={this.copy}>Copy</button>
           <button onClick={this.reverse}>Reverse</button>
+          <button onClick={this.wotd}>WOTD</button>
         </div>
         <div className="io">
           <Input value={this.state.words[0]} id="0" changed={(event) => this.updateWords(event, 0)} />

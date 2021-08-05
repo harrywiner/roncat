@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-/api
 
 # testing
 /coverage
@@ -25,3 +24,12 @@ yarn-error.log*
 
 # Shared file
 /src/Master-Concatenator
+
+.env
+.vscode
+
+# Scraper data
+/scraper/data
+/scraper/oed_data
+/scraper/ud_data
+/scraper/screenshot.png

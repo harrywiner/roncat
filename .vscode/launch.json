@@ -22,5 +22,23 @@
             "request": "launch",
             "type": "node-terminal"
         },
+        {
+            "command": "NODE_ENV=development node scrapermongo.js",
+            "name": "Debug winserter",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "command": "NODE_ENV=development node scraper/scimmer.js",
+            "name": "Debug Scimmer",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "command": "NODE_ENV=development node scraper/index.js",
+            "name": "Debug full scraper",
+            "request": "launch",
+            "type": "node-terminal"
+        }
     ]
 }
