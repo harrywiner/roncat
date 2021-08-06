@@ -2,32 +2,48 @@ const Wotd = require('../models/wotd')
 require('dotenv').config()
 const { DateTime } = require("luxon");
 
-const MostRecentWordsPipeline = [
-    {
-        '$sort': {
-            'date': -1
-        }
-    }, {
-        '$group': {
-            '_id': '$type',
-            'date': {
-                '$max': '$date'
-            },
-            'doc': {
-                '$first': '$$ROOT'
+function MostRecentWordsPipeline() {
+    var now = DateTime.now({ zone: "GMT" })
+    var midnight = DateTime.utc(now.c.year, now.c.month, now.c.day, 0, 0, 0);
+    console.log(midnight.ts)
+    return [
+        {
+            '$sort': {
+                'date': -1
+            }
+        }, {
+            '$group': {
+                '_id': '$type',
+                'date': {
+                    '$max': '$date'
+                },
+                'doc': {
+                    '$first': '$$ROOT'
+                }
+            }
+        }, {
+            '$replaceRoot': {
+                'newRoot': '$doc'
+            }
+        }, {
+            '$match': {
+                '$expr': {
+                    '$gte': [
+                        {
+                            '$toLong': '$date'
+                        },
+                        midnight.ts
+                    ]
+                }
             }
         }
-    }, {
-        '$replaceRoot': {
-            'newRoot': '$doc'
-        }
-    }
-]
+    ]
+}
 
 module.exports = {
     getWotds() {
         // returns most recent words
-        return Wotd.aggregate(MostRecentWordsPipeline).catch(err => { throw err })
+        return Wotd.aggregate(MostRecentWordsPipeline()).catch(err => { throw err })
     },
     async insertWotds(payload) {
         /** payload: {
