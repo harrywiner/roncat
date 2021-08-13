@@ -4,6 +4,7 @@ const tools = require('./src/tools')
 const Wotd = require('./models/wotd')
 const { body, validationResult } = require('express-validator')
 const Boom = require('@hapi/boom')
+const { DateTime } = require("luxon");
 
 router.get('/', (req, res) => {
     res.send("Hello and welcome to my API! \n to properly query use the following format: \n https://path.com/concat/wordA/wordB")
@@ -37,15 +38,25 @@ router.get('/:wordA/:wordB', (req, res) => {
 router.get('/wotd', async (req, res, next) => {
     try {
 
-        var wotds = await tools.getWotds().catch(err => { next(err) })
+        var wotds = await tools.getWotds().catch(err => { return next(err) })
+
+        if (!wotds)
+            return
 
         // todo assure doesn't error if no word
         const USR = wotds.filter(word => { return word.type === "USR" })[0]
 
         if (USR) {
-            var words = USR.word.split(' ')
 
-            if (words.length >= 2) {
+            var now = DateTime.now({ zone: "GMT" })
+            var midnight = DateTime.utc(now.c.year, now.c.month, now.c.day, 0, 0, 0);
+            console.log(midnight.ts)
+
+            var date = DateTime.fromMillis(parseInt(USR.date))
+
+            var words = USR.word.split(' ')
+            // if there are not two user-defined words, continue as normal
+            if (words.length >= 2 && date >= midnight) {
                 const result = concat(words[0], words[1])
 
                 var wordA = new Wotd({ ...USR })
@@ -64,6 +75,9 @@ router.get('/wotd', async (req, res, next) => {
         const UD = wotds.filter(word => { return word.type === "UD" })[0]
         const OED = wotds.filter(word => { return word.type === "OED" })[0]
 
+        if (!UD) {
+            return next(new Boom.badImplementation("Urban dictionary word missing"))
+        }
         var words = UD.word.split(' ')
         // if the Urban dictionary term is 2 words long (or more) then concat them both
         if (words.length >= 2) {
@@ -80,6 +94,9 @@ router.get('/wotd', async (req, res, next) => {
                 result
             })
         } else {
+            if (!OED) {
+                return next(new Boom.badImplementation("OED word missing"))
+            }
             const result = concat(UD.word, OED.word)
             return res.status(200).send({
                 wordA: UD,
