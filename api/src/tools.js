@@ -4,8 +4,8 @@ const { DateTime } = require("luxon");
 
 
 
-function MostRecentWordsPipeline() {
 
+function MostRecentWordsPipeline() {
     return [
         {
             '$sort': {
