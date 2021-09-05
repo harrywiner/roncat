@@ -5,12 +5,12 @@ div.parent {
   place-items: center;
   padding-top: 0%;
   padding-bottom: 0%;
-  border: solid green 2px;
   height: 100vh;
 }
 
 div.container {
-  border: solid blue 2px;
+  border: solid #a3a3a3 2px;
+  border-radius: 10px;
 }
 
 div.buttons {
