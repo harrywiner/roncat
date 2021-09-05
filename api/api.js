@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { concat } = require('./src/concat.js').default;
+const { concat, manyWordConcat } = require('./src/concat.js').default;
 const tools = require('./src/tools')
 const Wotd = require('./models/wotd')
 const { body, validationResult } = require('express-validator')
@@ -136,5 +136,13 @@ router.post('/wotd',
                 next(err)
             })
     })
+
+router.get('/*', (req, res) => {
+    console.log(req.params)
+    let words = req.params['0'].split('/')
+
+    var result = manyWordConcat(words)
+    res.send(result)
+})
 
 module.exports = router

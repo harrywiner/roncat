@@ -3,6 +3,8 @@ const vow = new RegExp(/[a,e,i,o,u,y]/);
 
 const basic = new RegExp(con.source + "*|" + vow.source, "i");
 
+const manyWord = new RegExp(`(${con.source}*${vow.source}+)+`, `i`)
+
 // Function that takes two words and concatenates them
 // Matches the words to the right pattern then concatenates
 function concat(wordA: string, wordB: string) {
@@ -11,6 +13,16 @@ function concat(wordA: string, wordB: string) {
     let result = wordB.replace(basic, woot);
     return result;
   }
+}
+
+function manyWordConcat(words: [string]) {
+  let word = words.shift()
+  if (words && !words[0]) {
+    // base case, if that is the last word then return it
+    return word
+  }
+  let [woot] = manyWord.exec(word)
+  return woot + manyWordConcat(words)
 }
 
 // If the word is matched exp from the beginning of the word
@@ -22,6 +34,7 @@ function match(word: string, exp: RegExp) {
 
 const _ = {
   concat,
+  manyWordConcat
 }
 export default _;
 
