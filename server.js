@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const Boom = require('@hapi/boom')
 
 const PORT = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, 'build')));
@@ -35,7 +36,7 @@ app.use((err, req, res, next) => {
     console.error("Error caught by Express: ", err)
     if (res.headersSent)
         return next(err)
-    res.status(500).send(err.message)
+    res.status(500).send(err.stack)
 })
 
 /**
@@ -43,6 +44,10 @@ app.use((err, req, res, next) => {
  */
 
 const MONGO_URI = process.env.MONGO_URI
-require('mongoose').connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => { console.log("Mongoose Connected!") })
-    .catch(err => { console.error("Connection error: ", err) })
+if (!MONGO_URI) {
+    throw Boom.badImplementation("Missing DB URI")
+} else {
+    require('mongoose').connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(() => { console.log("Mongoose Connected!") })
+        .catch(err => { console.error("Connection error: ", err) })
+}

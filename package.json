@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
+    "electron": "^14.0.0",
     "express-validator": "^6.12.1",
     "luxon": "^2.0.1",
     "mongoose": "^5.13.5",
@@ -25,6 +26,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "react": "react-scripts start",
+    "compile": "npx tsc api/src/concat.ts --sourceMap",
     "scraper": "NODE_ENV=production node ./scraper/index.js",
     "test scraper": "NODE_ENV=development node ./scraper/index.js"
   },
