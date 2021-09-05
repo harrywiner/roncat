@@ -28,7 +28,7 @@ function reverse() {
 }
 
 const UtilityButtons = (props) => {
-    return <div className="buttons">
+    return <div className="utilities">
         <button onClick={reset.bind(props.this)}>Reset</button>
         <button onClick={copy.bind(props.this)}>Copy</button>
         <button onClick={reverse.bind(props.this)}>Reverse</button>
