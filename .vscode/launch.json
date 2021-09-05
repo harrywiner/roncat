@@ -29,6 +29,12 @@
             "type": "node-terminal"
         },
         {
+            "command": "npm run react",
+            "name": "Run React",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
             "command": "NODE_ENV=development node scrapermongo.js",
             "name": "Debug winserter",
             "request": "launch",

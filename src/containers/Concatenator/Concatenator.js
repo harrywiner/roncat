@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import "./Concatenator.css";
 import "../../App.css";
-import Input from "../../components/Input/Input";
 import Result from "../../components/Result/Result";
-import concat from "../../concat";
+import tools from "../../concat";
 import axios from "axios";
 import UtilityButtons from "../../components/UtilityButtons/UtilityButtons";
+import WordInputs from "../../components/WordInputs/WordInputs";
 
 class Concatenator extends Component {
   state = {
     // [String]
     words: [],
     result: "",
-    hello: 0
+    hello: 0,
+    numFields: 3
   };
 
   updateWords = (event, id) => {
@@ -25,9 +26,11 @@ class Concatenator extends Component {
   };
 
   determineResult = () => {
-    const words = this.state.words;
-    if (words[0] && words[1]) {
-      return concat(words[0], words[1]);
+    const words = this.state.words.slice();
+    if (words.length >= 3) {
+      return tools.manyWordConcat(words)
+    } else if (words[0] && words[1]) {
+      return tools.concat(words[0], words[1]);
     }
   };
 
@@ -47,7 +50,6 @@ class Concatenator extends Component {
   }
 
   random = () => {
-    console.log("Random")
     axios.get(`https://random-word-api.herokuapp.com/word?number=2&swear=1`)
       .then((res) => {
         const newState = this.state;
@@ -72,31 +74,18 @@ class Concatenator extends Component {
       })
   }
 
-  reset = () => {
-    const newState = this.state;
-    newState.words = []
+  resetState = () => {
+    const newState = {
+      ...this.state,
+      words: [],
+      result: "",
+      hello: 0,
+      numFields: 2
+    }
+
     this.setState(newState)
-    console.log(JSON.stringify(this.state));
 
     this.props.setFooters([])
-  }
-
-  copy = () => {
-    const words = this.state.words
-    if (words[0] && words[1]) {
-      var nord = concat(words[0], words[1]);
-      var centence = `${words[0]} ${words[1]}. ${nord}`
-
-      console.log("Coppied to clipboard: " + centence)
-
-      navigator.clipboard.writeText(centence)
-    }
-  }
-
-  reverse = () => {
-    var newState = this.state
-    newState.words = newState.words.reverse()
-    this.setState(newState)
   }
 
   render() {
@@ -109,8 +98,7 @@ class Concatenator extends Component {
           <UtilityButtons this={this} />
         </div>
         <div className="io">
-          <Input value={this.state.words[0]} id="0" changed={(event) => this.updateWords(event, 0)} />
-          <Input value={this.state.words[1]} id="1" changed={(event) => this.updateWords(event, 1)} />
+          <WordInputs numFields={this.state.numFields} changed={this.updateWords} words={this.state.words} />
           <p className="spacer">.</p>
           <Result text={this.determineResult()} />
         </div>

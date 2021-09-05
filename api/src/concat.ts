@@ -21,16 +21,19 @@ function manyWordConcat(words: [string]) {
     // base case, if that is the last word then return it
     return word
   }
-  let [woot] = manyWord.exec(word)
-  return woot + manyWordConcat(words)
+  let woots = manyWord.exec(word)
+  if (!woots) {
+    return word + manyWordConcat(words)
+  }
+  return woots[0] + manyWordConcat(words)
 }
 
 // If the word is matched exp from the beginning of the word
-function match(word: string, exp: RegExp) {
-  let res = exp.exec(word)[0]
-  return res === word.substring(0, res.length) &&
-    res.length != 0
-}
+// function match(word: string, exp: RegExp) {
+//   let res = exp.exec(word)[0]
+//   return res === word.substring(0, res.length) &&
+//     res.length !== 0
+// }
 
 const _ = {
   concat,
