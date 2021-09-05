@@ -6,7 +6,7 @@ const input = (props) => {
       type="text"
       size={props.value && props.value.length > 5 ? props.value.length : 5}
       id={"word-" + props.id}
-      onChange={props.changed}
+      onChange={(event) => props.changed(event, props.id)}
       value={props.value || ""}
     ></input>
   );

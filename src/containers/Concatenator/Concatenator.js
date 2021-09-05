@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import "./Concatenator.css";
 import "../../App.css";
-import Input from "../../components/Input/Input";
 import Result from "../../components/Result/Result";
-import concat from "../../concat";
 import axios from "axios";
+import UtilityButtons from "../../components/UtilityButtons/UtilityButtons";
+import WordInputs from "../../components/WordInputs/WordInputs";
+import FunctionalTools from "../../FunctionalTools.js"
+const { Map } = require('immutable')
 
 class Concatenator extends Component {
   state = {
     // [String]
     words: [],
     result: "",
-    hello: 0
+    hello: 0,
+    numFields: 2
   };
 
   updateWords = (event, id) => {
@@ -24,11 +27,13 @@ class Concatenator extends Component {
   };
 
   determineResult = () => {
-    const words = this.state.words;
-    if (words[0] && words[1]) {
-      return concat(words[0], words[1]);
+    const words = this.state.words.slice();
+    if (words.length >= 3) {
+      return FunctionalTools.manyWordConcat(words)
+    } else if (words[0] && words[1]) {
+      return FunctionalTools.concat(words[0], words[1]);
     }
-  };
+  }
 
   helloBoozer = () => {
     console.log("Hello Boozer")
@@ -46,8 +51,7 @@ class Concatenator extends Component {
   }
 
   random = () => {
-    console.log("Random")
-    axios.get(`https://random-word-api.herokuapp.com/word?number=2&swear=1`)
+    axios.get(`https://random-word-api.herokuapp.com/word?number=${this.state.numFields}&swear=1`)
       .then((res) => {
         const newState = this.state;
         console.log(res.data)
@@ -71,30 +75,9 @@ class Concatenator extends Component {
       })
   }
 
-  reset = () => {
-    const newState = this.state;
-    newState.words = []
-    this.setState(newState)
-    console.log(JSON.stringify(this.state));
-
-    this.props.setFooters([])
-  }
-
-  copy = () => {
-    const words = this.state.words
-    if (words[0] && words[1]) {
-      var nord = concat(words[0], words[1]);
-      var centence = `${words[0]} ${words[1]}. ${nord}`
-
-      console.log("Coppied to clipboard: " + centence)
-
-      navigator.clipboard.writeText(centence)
-    }
-  }
-
-  reverse = () => {
-    var newState = this.state
-    newState.words = newState.words.reverse()
+  addInput = () => {
+    const newState = this.state
+    newState.numFields = newState.numFields + 1
     this.setState(newState)
   }
 
@@ -104,16 +87,17 @@ class Concatenator extends Component {
         <div className="buttons">
           <button onClick={this.helloWorld}>Hello World</button>
           <button onClick={this.random}>Random</button>
-          <button onClick={this.reset}>Reset</button>
-          <button onClick={this.copy}>Copy</button>
-          <button onClick={this.reverse}>Reverse</button>
           <button onClick={this.wotd}>WOTD</button>
+          <UtilityButtons this={this} />
         </div>
         <div className="io">
-          <Input value={this.state.words[0]} id="0" changed={(event) => this.updateWords(event, 0)} />
-          <Input value={this.state.words[1]} id="1" changed={(event) => this.updateWords(event, 1)} />
-          <p className="spacer">.</p>
-          <Result text={this.determineResult()} />
+          <WordInputs numFields={this.state.numFields} changed={this.updateWords} words={this.state.words.slice()} />
+          <div className="spacer">
+            <span className="spacer">.</span>
+            <button onClick={this.addInput}>+</button>
+          </div>
+
+          <Result text={FunctionalTools.determineResult(this.state.words.slice())} />
         </div>
         <div>
           {this.state.message &&

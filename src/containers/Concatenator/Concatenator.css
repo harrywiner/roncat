@@ -5,24 +5,19 @@ div.io {
   justify-content: space-around;
 }
 
-Input {
-  border: 0px;
-  border-bottom: 2px black solid;
-  margin: 0px 10px 0px 10px;
-  padding: 0px 10px 0px 10px;
-  font-size: 40px;
-}
-
-Input:focus {
-  box-shadow: 0 0 5px grey;
-  outline-color: white;
-}
-
-p.spacer {
+span.spacer {
   font-size: 30px;
+  
 }
 
 Result {
   margin: 0;
   font-size: 40px
+}
+
+div.spacer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
 }
