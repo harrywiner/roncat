@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import "./Concatenator.css";
 import "../../App.css";
 import Result from "../../components/Result/Result";
-import tools from "../../concat";
 import axios from "axios";
 import UtilityButtons from "../../components/UtilityButtons/UtilityButtons";
 import WordInputs from "../../components/WordInputs/WordInputs";
+import FunctionalTools from "../../FunctionalTools.js"
+const { Map } = require('immutable')
 
 class Concatenator extends Component {
   state = {
@@ -13,7 +14,7 @@ class Concatenator extends Component {
     words: [],
     result: "",
     hello: 0,
-    numFields: 3
+    numFields: 2
   };
 
   updateWords = (event, id) => {
@@ -28,11 +29,11 @@ class Concatenator extends Component {
   determineResult = () => {
     const words = this.state.words.slice();
     if (words.length >= 3) {
-      return tools.manyWordConcat(words)
+      return FunctionalTools.manyWordConcat(words)
     } else if (words[0] && words[1]) {
-      return tools.concat(words[0], words[1]);
+      return FunctionalTools.concat(words[0], words[1]);
     }
-  };
+  }
 
   helloBoozer = () => {
     console.log("Hello Boozer")
@@ -50,7 +51,7 @@ class Concatenator extends Component {
   }
 
   random = () => {
-    axios.get(`https://random-word-api.herokuapp.com/word?number=2&swear=1`)
+    axios.get(`https://random-word-api.herokuapp.com/word?number=${this.state.numFields}&swear=1`)
       .then((res) => {
         const newState = this.state;
         console.log(res.data)
@@ -74,18 +75,10 @@ class Concatenator extends Component {
       })
   }
 
-  resetState = () => {
-    const newState = {
-      ...this.state,
-      words: [],
-      result: "",
-      hello: 0,
-      numFields: 2
-    }
-
+  addInput = () => {
+    const newState = this.state
+    newState.numFields = newState.numFields + 1
     this.setState(newState)
-
-    this.props.setFooters([])
   }
 
   render() {
@@ -98,9 +91,13 @@ class Concatenator extends Component {
           <UtilityButtons this={this} />
         </div>
         <div className="io">
-          <WordInputs numFields={this.state.numFields} changed={this.updateWords} words={this.state.words} />
-          <p className="spacer">.</p>
-          <Result text={this.determineResult()} />
+          <WordInputs numFields={this.state.numFields} changed={this.updateWords} words={this.state.words.slice()} />
+          <div className="spacer">
+            <span className="spacer">.</span>
+            <button onClick={this.addInput}>+</button>
+          </div>
+
+          <Result text={FunctionalTools.determineResult(this.state.words.slice())} />
         </div>
         <div>
           {this.state.message &&

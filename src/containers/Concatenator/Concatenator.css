@@ -5,11 +5,19 @@ div.io {
   justify-content: space-around;
 }
 
-p.spacer {
+span.spacer {
   font-size: 30px;
+  
 }
 
 Result {
   margin: 0;
   font-size: 40px
+}
+
+div.spacer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
 }

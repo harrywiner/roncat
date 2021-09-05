@@ -1,24 +1,20 @@
 import React from "react";
 import concat from "../../concat";
+import FunctionalTools from "../../FunctionalTools"
+
+
 function copy() {
-    const words = this.state.words
-    if (words[0] && words[1]) {
-        var nord = concat(words[0], words[1]);
-        var centence = `${words[0]} ${words[1]}. ${nord}`
+    const words = this.state.words.slice()
+
+    if (words.length >= 2) {
+        const result = FunctionalTools.determineResult(words)
+
+        const centence = FunctionalTools.buildSentence(words, result)
 
         console.log("Coppied to clipboard: " + centence)
 
         navigator.clipboard.writeText(centence)
     }
-}
-
-function reset() {
-    const newState = this.state;
-    newState.words = []
-    this.setState(newState)
-    console.log(JSON.stringify(this.state));
-
-    this.props.setFooters([])
 }
 
 function reverse() {
@@ -29,7 +25,7 @@ function reverse() {
 
 const UtilityButtons = (props) => {
     return <div className="utilities">
-        <button onClick={reset.bind(props.this)}>Reset</button>
+        <button onClick={FunctionalTools.resetState.bind(props.this)}>Reset</button>
         <button onClick={copy.bind(props.this)}>Copy</button>
         <button onClick={reverse.bind(props.this)}>Reverse</button>
     </div>
