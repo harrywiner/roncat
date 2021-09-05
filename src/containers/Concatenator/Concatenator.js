@@ -5,6 +5,7 @@ import Input from "../../components/Input/Input";
 import Result from "../../components/Result/Result";
 import concat from "../../concat";
 import axios from "axios";
+import UtilityButtons from "../../components/UtilityButtons/UtilityButtons";
 
 class Concatenator extends Component {
   state = {
@@ -104,10 +105,8 @@ class Concatenator extends Component {
         <div className="buttons">
           <button onClick={this.helloWorld}>Hello World</button>
           <button onClick={this.random}>Random</button>
-          <button onClick={this.reset}>Reset</button>
-          <button onClick={this.copy}>Copy</button>
-          <button onClick={this.reverse}>Reverse</button>
           <button onClick={this.wotd}>WOTD</button>
+          <UtilityButtons this={this} />
         </div>
         <div className="io">
           <Input value={this.state.words[0]} id="0" changed={(event) => this.updateWords(event, 0)} />
